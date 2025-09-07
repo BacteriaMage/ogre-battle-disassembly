@@ -1,6 +1,8 @@
-﻿namespace BacteriaMage.OgreBattle.Disassembler;
+﻿// github.com/BacteriaMage
 
-public class RomImage
+namespace BacteriaMage.OgreBattle.Disassembler;
+
+public class RomImage : IByteData
 {
     private byte[]? _data;
     
@@ -12,7 +14,7 @@ public class RomImage
 
     public RomImage(string filePath)
     {
-        ReadImage(filePath);   
+        LoadImage(filePath);   
     }
 
     public RomImage(IEnumerable<byte> data)
@@ -20,14 +22,19 @@ public class RomImage
         _data = data.ToArray();
     }
     
-    public void ReadImage(string filePath)
+    public void LoadImage(string filePath)
     {
         _data = File.ReadAllBytes(filePath);
     }
 
+    public byte ReadByte(int address)
+    {
+        return (_data is not null) && (address >= 0) && (address < _data.Length) ? _data[address] : (byte)0xff;
+    }
+
     public byte this[int index]
     {
-        get => _data[index];
+        get => ReadByte(index);
     }
 
     public static RomImage FromFile(string filePath)
