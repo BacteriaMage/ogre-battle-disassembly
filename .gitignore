@@ -1,5 +1,6 @@
 bin/
 obj/
 .idea/
-*.code-workspace
 *.sfc
+*.code-workspace
+*.sln.DotSettings.user
