@@ -29,7 +29,7 @@ public class InvalidAddressException : Exception
     
     private static string ToMessage(int address, string? addressType)
     {
-        ToBankAndWord(address, out int bank, out int offset);
+        ToBankAndOffset(address, out int bank, out int offset);
 
         if (string.IsNullOrEmpty(addressType))
         {

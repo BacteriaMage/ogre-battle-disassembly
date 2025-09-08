@@ -65,13 +65,13 @@ public static class ConvertUtilities
         low = ToWord(value);
     }
     
-    public static void ToBankAndWord(int value, out int bank, out int word)
+    public static void ToBankAndOffset(int value, out int bank, out int word)
     {
         bank = (value >> 16) & 0xff;
         word = value & 0xffff;
     }
     
-    public static void ToBankAndWord(int value, out byte bank, out ushort word)
+    public static void ToBankAndOffset(int value, out byte bank, out ushort word)
     {
         bank = ToByte(value >> 16);
         word = ToWord(value);
@@ -117,12 +117,12 @@ public static class ConvertUtilities
         return (high & 0xffff) << 16 | (low & 0xffff);
     }
     
-    public static int FromBankAndWord(byte bank, ushort word)
+    public static int FromBankAndOffset(byte bank, ushort word)
     {
         return ToInt(bank) << 16 | ToInt(word);
     }
     
-    public static int FromBankAndWord(int bank, int word)
+    public static int FromBankAndOffset(int bank, int word)
     {
         return (bank & 0xff) << 16 | (word & 0xffff);
     }

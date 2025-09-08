@@ -27,7 +27,7 @@ public class LoRom(IByteData data) : ICartridgeBus
 
     public ushort ReadWord(int address)
     {
-        ToBankAndWord(address, out int bank, out int offset);
+        ToBankAndOffset(address, out int bank, out int offset);
         return ReadWord(bank, offset);      
     }
 
@@ -51,7 +51,7 @@ public class LoRom(IByteData data) : ICartridgeBus
 
     private static int ToRomAddress(int address)
     {
-        ToBankAndWord(address, out int bank, out int offset);
+        ToBankAndOffset(address, out int bank, out int offset);
         return ToRomAddress(bank, offset);
     }
 

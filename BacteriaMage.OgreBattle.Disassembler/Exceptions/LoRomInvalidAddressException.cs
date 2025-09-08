@@ -14,7 +14,7 @@ public class LoRomInvalidAddressException : InvalidAddressException
     }
     
     public LoRomInvalidAddressException(int bank, int address)
-        : this(FromBankAndWord(bank, address))
+        : this(FromBankAndOffset(bank, address))
     {
     }
 }
