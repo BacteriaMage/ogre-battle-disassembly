@@ -92,21 +92,22 @@ public static class ArgsParser
 
     private static void ProcessArgument(List<ParserOption> arguments, string value)
     {
-        if (arguments.Any(option => option is RequiredOption))
+        if (arguments.IsNotEmpty())
         {
             var argument = (ArgumentOption)arguments.Dequeue();
             argument.Action(value);
         }
-
-        throw new ParameterException($"Unexpected parameter: {value}");
+        else
+        {
+            throw new ParameterException($"Unexpected parameter: {value}");
+        }
     }
 
     private static void ProcessUnsatisfiedArgument(List<ParserOption> arguments)
     {
-        if (arguments.IsNotEmpty())
+        if (arguments.Any(option => option is RequiredOption))
         {
             var argument = (ArgumentOption)arguments.Dequeue();
-            
             throw new ParameterException($"Expected parameter: {argument.Name}");
         }
     }
