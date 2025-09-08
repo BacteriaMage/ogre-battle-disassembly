@@ -2,11 +2,20 @@
 
 namespace BacteriaMage.OgreBattle.Disassembler;
 
+using static ArgsParser;
+
 public class Program
 {
+    private string _romPath;
+    private string _outputPath;
+    
     private void ParseArgs(string[] args)
     {
-        Messenger.ShowVerbose = !args.Contains("-q");
+        ArgsParser.ParseArgs(args, [
+            Required("RomPath", path => _romPath = path),
+            Required("OutputPath", path => _outputPath = path),
+            Switch("v", () => Messenger.ShowVerbose = true),
+        ]);
     }
 
     private void Run()
