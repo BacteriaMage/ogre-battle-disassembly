@@ -1,6 +1,6 @@
 ﻿// github.com/BacteriaMage
 
-namespace BacteriaMage.OgreBattle.Disassembler;
+namespace BacteriaMage.OgreBattle.Disassembler.Interfaces;
 
 public interface ICartridgeBus
 {

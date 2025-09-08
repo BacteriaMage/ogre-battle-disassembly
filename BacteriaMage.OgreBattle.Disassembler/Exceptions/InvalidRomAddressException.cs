@@ -1,6 +1,8 @@
 ﻿// github.com/BacteriaMage
 
-namespace BacteriaMage.OgreBattle.Disassembler;
+using BacteriaMage.OgreBattle.Disassembler.Utilities;
+
+namespace BacteriaMage.OgreBattle.Disassembler.Exceptions;
 
 using static ConvertUtilities;
 
