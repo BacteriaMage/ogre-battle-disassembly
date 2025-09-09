@@ -1,10 +1,11 @@
 ﻿// github.com/BacteriaMage
 
 using BacteriaMage.OgreBattle.Disassembler.Utilities;
+using Convert = BacteriaMage.OgreBattle.Disassembler.Utilities.Convert;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Exceptions;
 
-using static ConvertUtilities;
+using static Convert;
 
 public class LoRomBoundaryException(int address) : Exception(ToMessage(address))
 {

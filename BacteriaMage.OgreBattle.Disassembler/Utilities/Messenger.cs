@@ -1,4 +1,4 @@
-﻿namespace BacteriaMage.OgreBattle.Disassembler;
+﻿namespace BacteriaMage.OgreBattle.Disassembler.Utilities;
 
 using static Console;
 using static ConsoleColor;

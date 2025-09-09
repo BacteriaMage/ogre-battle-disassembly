@@ -3,7 +3,7 @@
 using BacteriaMage.OgreBattle.Disassembler.Exceptions;
 using BacteriaMage.OgreBattle.Disassembler.Extensions;
 
-namespace BacteriaMage.OgreBattle.Disassembler;
+namespace BacteriaMage.OgreBattle.Disassembler.Utilities;
 
 public static class ArgsParser
 {

@@ -1,5 +1,7 @@
 ﻿// github.com/BacteriaMage
 
+using BacteriaMage.OgreBattle.Disassembler.Utilities;
+
 namespace BacteriaMage.OgreBattle.Disassembler;
 
 using static ArgsParser;

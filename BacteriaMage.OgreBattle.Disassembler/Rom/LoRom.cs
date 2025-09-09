@@ -3,10 +3,11 @@
 using BacteriaMage.OgreBattle.Disassembler.Exceptions;
 using BacteriaMage.OgreBattle.Disassembler.Interfaces;
 using BacteriaMage.OgreBattle.Disassembler.Utilities;
+using Convert = BacteriaMage.OgreBattle.Disassembler.Utilities.Convert;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Rom;
 
-using static ConvertUtilities;
+using static Convert;
 
 public class LoRom(IByteData data) : ICartridgeBus
 {

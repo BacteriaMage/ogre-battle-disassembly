@@ -2,7 +2,7 @@
 
 namespace BacteriaMage.OgreBattle.Disassembler.Utilities;
 
-public static class ConvertUtilities
+public static class Convert
 {
     public static int ToInt(byte value) => value;
     public static int ToInt(ushort value) => value;
