@@ -1,6 +1,6 @@
 ﻿// github.com/BacteriaMage
 
-using BacteriaMage.OgreBattle.Disassembler.Interfaces;
+using BacteriaMage.OgreBattle.Disassembler.Types;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Rom;
 

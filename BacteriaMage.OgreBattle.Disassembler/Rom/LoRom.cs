@@ -1,8 +1,7 @@
 ﻿// github.com/BacteriaMage
 
 using BacteriaMage.OgreBattle.Disassembler.Exceptions;
-using BacteriaMage.OgreBattle.Disassembler.Interfaces;
-using BacteriaMage.OgreBattle.Disassembler.Utilities;
+using BacteriaMage.OgreBattle.Disassembler.Types;
 using Convert = BacteriaMage.OgreBattle.Disassembler.Utilities.Convert;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Rom;
