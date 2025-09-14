@@ -12,10 +12,9 @@ public enum OpcodeBehavior
 }
 
 /// <summary>
-/// Defines additional qualifiers or attributes that alter the
-/// interpretation or behavior of an opcode.
+/// Defines the modifier that influences the size of an opcode's operand.
 /// </summary>
-public enum OpcodeModifier
+public enum OperandModifier
 {
     None,
     MFlag,
@@ -51,9 +50,9 @@ public enum OperandMeaning
 public class Opcode(
     int number,
     string mnemonic,
-    int length,
+    int operandSize,
     OpcodeBehavior behavior,
-    OpcodeModifier modifier,
+    OperandModifier modifier,
     OperandTarget target,
     OperandMeaning meaning,
     string pattern)
@@ -69,9 +68,9 @@ public class Opcode(
     public readonly string Mnemonic = mnemonic;
     
     /// <summary>
-    /// Gets the number of bytes the opcode consumes without modification.
+    /// Gets the unmodified size of the operand in bytes.
     /// </summary>
-    public readonly int Length = length;
+    public readonly int OperandSize = operandSize;
     
     /// <summary>
     /// Gets the behavior of the opcode.
@@ -79,9 +78,9 @@ public class Opcode(
     public readonly OpcodeBehavior Behavior = behavior;
 
     /// <summary>
-    /// Gets the modifier that influences the interpretation of the opcode.
+    /// Gets the modifier that influences the size of the operand.
     /// </summary>
-    public readonly OpcodeModifier Modifier = modifier;
+    public readonly OperandModifier Modifier = modifier;
 
     /// <summary>
     /// Gets the target operand type that specifies the kind of data or
