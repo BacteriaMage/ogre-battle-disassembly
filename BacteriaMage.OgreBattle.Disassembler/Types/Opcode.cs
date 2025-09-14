@@ -55,7 +55,8 @@ public class Opcode(
     OpcodeBehavior behavior,
     OpcodeModifier modifier,
     OperandTarget target,
-    OperandMeaning meaning)
+    OperandMeaning meaning,
+    string pattern)
 {
     /// <summary>
     /// Gets the unique numerical identifier for the opcode.
@@ -93,4 +94,9 @@ public class Opcode(
     /// associated with the opcode.
     /// </summary>
     public readonly OperandMeaning Meaning = meaning;
+    
+    /// <summary>
+    /// Gets the pattern that defines the format of the opcode's operands.
+    /// </summary>
+    public readonly string Pattern = pattern;
 }
