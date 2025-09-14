@@ -4,11 +4,11 @@ namespace BacteriaMage.OgreBattle.Disassembler.Types;
 
 public interface ICartridgeBus
 {
-    byte ReadByte(int address);
-    byte ReadByte(int bank, int address);
-    byte ReadByte(byte bank, ushort address);
+    byte ReadByte(int longAddress);
+    byte ReadByte(int bank, int offset);
+    byte ReadByte(Address address);
     
-    ushort ReadWord(int address);
-    ushort ReadWord(int bank, int address);
-    ushort ReadWord(byte bank, ushort address);
+    ushort ReadWord(int longAddress);
+    ushort ReadWord(int bank, int offset);
+    ushort ReadWord(Address address);
 }

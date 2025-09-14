@@ -2,42 +2,35 @@
 
 using BacteriaMage.OgreBattle.Disassembler.Exceptions;
 using BacteriaMage.OgreBattle.Disassembler.Types;
-using Convert = BacteriaMage.OgreBattle.Disassembler.Utilities.Convert;
+using static BacteriaMage.OgreBattle.Disassembler.Utilities.Convert;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Rom;
 
-using static Convert;
-
-public class LoRom(IByteData data) : ICartridgeBus
+/// <summary>
+/// Provides functionality for reading data from Super Nintendo's LoROM cartridge layout.
+/// </summary>
+public class LoRom(IByteData data) : AbstractBus(data)
 {
-    public byte ReadByte(int address)
+    /// <summary>
+    /// Reads a single byte from the specified address on the cartridge bus.
+    /// </summary>
+    /// <param name="address">The CPU address from which to read the byte.</param>
+    /// <returns>The byte value read from the specified address.</returns>
+    public override byte ReadByte(Address address)
     {
-        return data.ReadByte(ToRomAddress(address));
+        return Data.ReadByte(ToRomAddress(address));
     }
 
-    public byte ReadByte(int bank, int offset)
+    /// <summary>
+    /// Reads a two-byte word from the specified address on the LoROM cartridge bus.
+    /// </summary>
+    /// <param name="address">The CPU address from which to read the word.</param>
+    /// <returns>The two-byte word value read from the specified address.</returns>
+    public override ushort ReadWord(Address address)
     {
-        return data.ReadByte(ToRomAddress(bank, offset));
-    }
+        int bank = address.Bank;
+        int offset = address.Offset;
 
-    public byte ReadByte(byte bank, ushort offset)
-    {
-        return data.ReadByte(ToRomAddress(bank, offset));
-    }
-
-    public ushort ReadWord(int address)
-    {
-        ToBankAndOffset(address, out int bank, out int offset);
-        return ReadWord(bank, offset);      
-    }
-
-    public ushort ReadWord(int bank, int offset)
-    {
-        return ReadWord(ToByte(bank), ToWord(offset));
-    }
-
-    public ushort ReadWord(byte bank, ushort offset)
-    {
         if (offset != 0xffff)
         {
             int lowByte = ReadByte(bank, offset);
@@ -49,14 +42,16 @@ public class LoRom(IByteData data) : ICartridgeBus
         throw new LoRomBoundaryException(bank, offset);
     }
 
-    private static int ToRomAddress(int address)
+    /// <summary>
+    /// Converts a CPU address to a ROM address in the LoROM memory mapping scheme.
+    /// </summary>
+    /// <param name="address">The CPU address to convert to a ROM address.</param>
+    /// <returns>The corresponding ROM address in the LoROM memory layout.</returns>
+    private static int ToRomAddress(Address address)
     {
-        ToBankAndOffset(address, out int bank, out int offset);
-        return ToRomAddress(bank, offset);
-    }
+        int bank = address.Bank;
+        int offset = address.Offset;
 
-    private static int ToRomAddress(int bank, int offset)
-    {
         if (offset < 0x8000)
         {
             throw new LoRomInvalidAddressException(bank, offset);
