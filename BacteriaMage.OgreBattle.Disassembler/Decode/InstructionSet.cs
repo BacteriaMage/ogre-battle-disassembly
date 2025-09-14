@@ -23,7 +23,7 @@ public enum DecodeMethod
 {
     Zero,
     Value,
-    Address,
+    Absolute,
     Relative,
 }
 
@@ -65,9 +65,9 @@ public class InstructionSet
             D(0x1D, "ORA", L(3), Next, Data, Value, "$HHLL,X"),
             D(0x1E, "ASL", L(3), Next, Data, Value, "$HHLL,X"),
             D(0x1F, "ORA", L(4), Next, Data, Value, "$HHMMLL,X"),
-            D(0x20, "JSR", L(3), Next, Code, Address, "$HHLL"),
+            D(0x20, "JSR", L(3), Next, Code, Absolute, "$HHLL"),
             D(0x21, "AND", L(2), Next, Data, Value, "($LL,X)"),
-            D(0x22, "JSL", L(4), Next, Code, Address, "$HHMMLL"),
+            D(0x22, "JSL", L(4), Next, Code, Absolute, "$HHMMLL"),
             D(0x23, "AND", L(2), Next, Data, Value, "$LL,S"),
             D(0x24, "BIT", L(2), Next, Data, Value, "$LL"),
             D(0x25, "AND", L(2), Next, Data, Value, "$LL"),
@@ -109,7 +109,7 @@ public class InstructionSet
             D(0x49, "EOR", M(3), Next, Data, Value, "#$LL"),
             D(0x4A, "LSR", L(1), Next, None, Zero, ""),
             D(0x4B, "PHK", L(1), Next, None, Zero, ""),
-            D(0x4C, "JMP", L(3), Stop, Code, Address, "$HHLL"),
+            D(0x4C, "JMP", L(3), Stop, Code, Absolute, "$HHLL"),
             D(0x4D, "EOR", L(3), Next, Data, Value, "$HHLL"),
             D(0x4E, "LSR", L(3), Next, Data, Value, "$HHLL"),
             D(0x4F, "EOR", L(4), Next, Data, Value, "$HHMMLL"),
@@ -125,7 +125,7 @@ public class InstructionSet
             D(0x59, "EOR", L(3), Next, Data, Value, "$HHLL,Y"),
             D(0x5A, "PHY", L(1), Next, None, Zero, ""),
             D(0x5B, "TCD", L(1), Next, None, Zero, ""),
-            D(0x5C, "JMP", L(4), Stop, Code, Address, "$HHMMLL"),
+            D(0x5C, "JMP", L(4), Stop, Code, Absolute, "$HHMMLL"),
             D(0x5D, "EOR", L(3), Next, Data, Value, "$HHLL,X"),
             D(0x5E, "LSR", L(3), Next, Data, Value, "$HHLL,X"),
             D(0x5F, "EOR", L(4), Next, Data, Value, "$HHMMLL,X"),
