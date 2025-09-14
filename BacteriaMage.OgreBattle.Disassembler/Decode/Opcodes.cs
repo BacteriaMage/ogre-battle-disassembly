@@ -1,7 +1,5 @@
 ﻿// github.com/BacteriaMage
 
-using BacteriaMage.OgreBattle.Disassembler.Types;
-
 namespace BacteriaMage.OgreBattle.Disassembler.Decode;
 
 using Behavior = OpcodeBehavior;

@@ -1,6 +1,6 @@
 ﻿// github.com/BacteriaMage
 
-namespace BacteriaMage.OgreBattle.Disassembler.Types;
+namespace BacteriaMage.OgreBattle.Disassembler.Decode;
 
 /// <summary>
 /// Defines the behavioral characteristics of an opcode during execution.
