@@ -55,7 +55,7 @@ public class Decoder(ICartridgeBus bus) : IDecoderState
         Opcode opcode = ReadOpcode();
         
         int operandSize = ComputeOperandSize(opcode);
-        int operand = ReadOperand(opcode, operandSize);
+        int operand = ReadOperand(operandSize);
         
         instruction = new Instruction(opcode, Position, operand, operandSize);
         
@@ -90,7 +90,7 @@ public class Decoder(ICartridgeBus bus) : IDecoderState
     /// Reads the operand bytes of the specified size for the given opcode
     /// and returns the constructed operand value.
     /// </summary>
-    private int ReadOperand(Opcode opcode, int size)
+    private int ReadOperand(int size)
     {
         int operand = 0;
         int position = Position.Long;
