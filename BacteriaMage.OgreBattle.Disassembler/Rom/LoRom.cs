@@ -7,7 +7,7 @@ using static BacteriaMage.OgreBattle.Disassembler.Utilities.Convert;
 namespace BacteriaMage.OgreBattle.Disassembler.Rom;
 
 /// <summary>
-/// Provides functionality for reading data from Super Nintendo's LoROM cartridge layout.
+/// Implementation of the cartridge bus for the LoROM cartridge layout.
 /// </summary>
 public class LoRom(IByteData data) : AbstractBus(data)
 {
