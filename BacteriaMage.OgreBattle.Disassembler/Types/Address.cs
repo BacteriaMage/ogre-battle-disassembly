@@ -7,7 +7,7 @@ namespace BacteriaMage.OgreBattle.Disassembler.Types;
 /// <summary>
 /// Represents an address in memory or ROM.
 /// </summary>
-public struct Address
+public readonly struct Address
 {
     /// <summary>
     /// Represents the bank component of a memory or ROM address.
