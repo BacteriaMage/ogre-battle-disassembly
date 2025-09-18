@@ -9,8 +9,8 @@ using static ArgsParser;
 
 public class Program
 {
-    private string _romPath;
-    private string _outputPath;
+    private string? _romPath;
+    private string? _outputPath;
     
     private void ParseArgs(string[] args)
     {
@@ -23,8 +23,7 @@ public class Program
 
     private void Run()
     {
-        LoRom rom = new(RomImage.FromFile(_romPath));
-        
+        LoRom rom = new(ReadRom());
         new Disassembly.Disassembler(rom).Disassemble();
     }
 
@@ -32,6 +31,16 @@ public class Program
     {
         ParseArgs(args);
         Run();
+    }
+
+    private RomImage ReadRom()
+    {
+        if (string.IsNullOrEmpty(_romPath))
+        {
+            throw new ArgumentException("No ROM path specified.");
+        }
+        
+        return RomImage.FromFile(_romPath);
     }
     
     public static int Main(string[] args)

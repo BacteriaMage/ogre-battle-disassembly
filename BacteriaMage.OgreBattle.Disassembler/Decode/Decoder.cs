@@ -1,5 +1,6 @@
 ﻿// github.com/BacteriaMage
 
+using System.Diagnostics.CodeAnalysis;
 using BacteriaMage.OgreBattle.Disassembler.Types;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Decode;
@@ -23,7 +24,21 @@ public class Decoder(ICartridgeBus bus) : IDecoderState
     /// The state of the CPU "X" flag the decoder will assume.
     /// </summary>
     public bool XFlag { get; set; }
+    
+    /// <summary>
+    /// Indicates whether there are more instructions to decode.
+    /// </summary>
+    public bool HaveNext { get; private set; }
 
+    /// <summary>
+    /// Moves the position of the next instruction to decode to the specified address.
+    /// </summary>
+    /// <param name="address">The target address.</param>
+    public void MoveTo(int address)
+    {
+        MoveTo(new Address(address));
+    }
+    
     /// <summary>
     /// Moves the position of the next instruction to decode to the specified address.
     /// </summary>
@@ -31,6 +46,7 @@ public class Decoder(ICartridgeBus bus) : IDecoderState
     public void MoveTo(Address address)
     {
         Position = address;
+        HaveNext = true;
     }
 
     /// <summary>
@@ -38,8 +54,19 @@ public class Decoder(ICartridgeBus bus) : IDecoderState
     /// </summary>
     /// <param name="address">The address from which the instruction should be decoded.</param>
     /// <param name="instruction">Returns the decoded instruction.</param>
-    /// <returns>True if more instructions are available to decode, false if a stop has been reached.</returns>
-    public bool DecodeAt(Address address, out Instruction instruction)
+    /// <returns>True if a valid instruction was decoded, false if a stop has been reached.</returns>
+    public bool DecodeAt(int address, [MaybeNullWhen(false)] out Instruction instruction)
+    {
+        return DecodeAt(new Address(address), out instruction);
+    }
+
+    /// <summary>
+    /// Decodes the instruction at the specified address and advances the position to the next instruction.
+    /// </summary>
+    /// <param name="address">The address from which the instruction should be decoded.</param>
+    /// <param name="instruction">Returns the decoded instruction.</param>
+    /// <returns>True if a valid instruction was decoded, false if a stop has been reached.</returns>
+    public bool DecodeAt(Address address, [MaybeNullWhen(false)] out Instruction instruction)
     {
         MoveTo(address);
         return DecodeNext(out instruction);
@@ -49,19 +76,26 @@ public class Decoder(ICartridgeBus bus) : IDecoderState
     /// Decodes the next instruction from the position and advances the position to the next instruction.
     /// </summary>
     /// <param name="instruction">Returns the decoded instruction.</param>
-    /// <returns>True if more instructions are available to decode, false if a stop has been reached.</returns>
-    public bool DecodeNext(out Instruction instruction)
+    /// <returns>True if a valid instruction was decoded, false if a stop has been reached.</returns>   
+    public bool DecodeNext([MaybeNullWhen(false)] out Instruction instruction)
     {
-        Opcode opcode = ReadOpcode();
-        
-        int operandSize = ComputeOperandSize(opcode);
-        int operand = ReadOperand(operandSize);
-        
-        instruction = new Instruction(opcode, Position, operand, operandSize + 1);
-        
-        Advance(operandSize);
-
-        return opcode.Behavior == OpcodeBehavior.Next;
+        if(HaveNext)
+        {
+            Opcode opcode = ReadOpcode();
+            int operandSize = ComputeOperandSize(opcode);
+            
+            instruction = new Instruction(opcode, Position, ReadOperand(operandSize), operandSize + 1);
+            HaveNext = (opcode.Behavior == OpcodeBehavior.Next);
+            
+            Advance(operandSize);
+            
+            return true;
+        }
+        else
+        {
+            instruction = null;
+            return false;
+        }
     }
 
     /// <summary>

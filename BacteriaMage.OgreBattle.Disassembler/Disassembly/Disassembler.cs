@@ -17,7 +17,7 @@ public class Disassembler(ICartridgeBus cartridge)
     {
         _decoder.MoveTo(0x8000);
 
-        while (_decoder.DecodeNext(out Instruction instruction))
+        while (_decoder.DecodeNext(out var instruction))
         {
             Verbose("{0:X6} {1}", instruction.Address.Long, instruction.Opcode.Mnemonic);
         }
