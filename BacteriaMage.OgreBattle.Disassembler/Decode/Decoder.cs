@@ -57,7 +57,7 @@ public class Decoder(ICartridgeBus bus) : IDecoderState
         int operandSize = ComputeOperandSize(opcode);
         int operand = ReadOperand(operandSize);
         
-        instruction = new Instruction(opcode, Position, operand, operandSize);
+        instruction = new Instruction(opcode, Position, operand, operandSize + 1);
         
         Advance(operandSize);
 

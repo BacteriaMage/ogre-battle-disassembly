@@ -1,5 +1,6 @@
 ﻿// github.com/BacteriaMage
 
+using BacteriaMage.OgreBattle.Disassembler.Rom;
 using BacteriaMage.OgreBattle.Disassembler.Utilities;
 
 namespace BacteriaMage.OgreBattle.Disassembler;
@@ -22,6 +23,9 @@ public class Program
 
     private void Run()
     {
+        LoRom rom = new(RomImage.FromFile(_romPath));
+        
+        new Disassembly.Disassembler(rom).Disassemble();
     }
 
     private void TryMain(string[] args)
