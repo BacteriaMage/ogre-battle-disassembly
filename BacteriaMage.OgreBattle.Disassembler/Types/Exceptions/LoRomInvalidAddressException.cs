@@ -2,7 +2,7 @@
 
 using BacteriaMage.OgreBattle.Disassembler.Utilities;
 
-namespace BacteriaMage.OgreBattle.Disassembler.Exceptions;
+namespace BacteriaMage.OgreBattle.Disassembler.Types.Exceptions;
 
 using static ValueConversion;
 

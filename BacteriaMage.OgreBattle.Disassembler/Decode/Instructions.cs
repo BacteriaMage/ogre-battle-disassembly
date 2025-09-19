@@ -2,8 +2,8 @@
 
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using BacteriaMage.OgreBattle.Disassembler.Exceptions;
 using BacteriaMage.OgreBattle.Disassembler.Types;
+using BacteriaMage.OgreBattle.Disassembler.Types.Exceptions;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Decode;
 

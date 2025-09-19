@@ -1,6 +1,6 @@
 ﻿// github.com/BacteriaMage
 
-using BacteriaMage.OgreBattle.Disassembler.Exceptions;
+using BacteriaMage.OgreBattle.Disassembler.Types.Exceptions;
 using BacteriaMage.OgreBattle.Disassembler.Utilities;
 
 namespace BacteriaMage.OgreBattle.Disassembler.UI;

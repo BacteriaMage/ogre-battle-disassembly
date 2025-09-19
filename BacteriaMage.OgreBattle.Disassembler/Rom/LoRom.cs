@@ -1,7 +1,7 @@
 ﻿// github.com/BacteriaMage
 
-using BacteriaMage.OgreBattle.Disassembler.Exceptions;
 using BacteriaMage.OgreBattle.Disassembler.Types;
+using BacteriaMage.OgreBattle.Disassembler.Types.Exceptions;
 using static BacteriaMage.OgreBattle.Disassembler.Utilities.ValueConversion;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Rom;
