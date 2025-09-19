@@ -1,6 +1,6 @@
 ﻿// github.com/BacteriaMage
 
-namespace BacteriaMage.OgreBattle.Disassembler.Extensions;
+namespace BacteriaMage.OgreBattle.Disassembler.Utilities;
 
 public static class ListExtensions
 {

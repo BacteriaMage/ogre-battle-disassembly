@@ -1,11 +1,10 @@
 ﻿// github.com/BacteriaMage
 
 using BacteriaMage.OgreBattle.Disassembler.Utilities;
-using Convert = BacteriaMage.OgreBattle.Disassembler.Utilities.Convert;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Exceptions;
 
-using static Convert;
+using static ValueConversion;
 
 public class LoRomInvalidAddressException : InvalidAddressException
 {

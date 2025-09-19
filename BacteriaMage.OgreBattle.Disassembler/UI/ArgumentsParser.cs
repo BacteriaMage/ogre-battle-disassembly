@@ -1,11 +1,11 @@
 ﻿// github.com/BacteriaMage
 
 using BacteriaMage.OgreBattle.Disassembler.Exceptions;
-using BacteriaMage.OgreBattle.Disassembler.Extensions;
+using BacteriaMage.OgreBattle.Disassembler.Utilities;
 
-namespace BacteriaMage.OgreBattle.Disassembler.Utilities;
+namespace BacteriaMage.OgreBattle.Disassembler.UI;
 
-public static class ArgsParser
+public static class ArgumentsParser
 {
     public abstract class ParserOption(string name)
     {

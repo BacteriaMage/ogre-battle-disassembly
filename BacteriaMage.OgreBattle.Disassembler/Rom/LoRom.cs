@@ -2,7 +2,7 @@
 
 using BacteriaMage.OgreBattle.Disassembler.Exceptions;
 using BacteriaMage.OgreBattle.Disassembler.Types;
-using static BacteriaMage.OgreBattle.Disassembler.Utilities.Convert;
+using static BacteriaMage.OgreBattle.Disassembler.Utilities.ValueConversion;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Rom;
 

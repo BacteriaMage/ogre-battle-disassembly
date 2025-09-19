@@ -1,38 +1,44 @@
 ﻿// github.com/BacteriaMage
 
 using BacteriaMage.OgreBattle.Disassembler.Rom;
-using BacteriaMage.OgreBattle.Disassembler.Utilities;
+using BacteriaMage.OgreBattle.Disassembler.UI;
 
 namespace BacteriaMage.OgreBattle.Disassembler;
 
-using static ArgsParser;
+using static ArgumentsParser;
 
-public class Program
+/// <summary>
+/// Main program entry point.
+/// </summary>
+public class Program : AbstractProgram
 {
     private string? _romPath;
     private string? _outputPath;
     
-    private void ParseArgs(string[] args)
+    /// <summary>
+    /// Parse command-line arguments.
+    /// </summary>
+    protected override void ParseArgs(string[] args)
     {
-        ArgsParser.ParseArgs(args, [
+        ArgumentsParser.ParseArgs(args, [
             Required("RomPath", path => _romPath = path),
             Required("OutputPath", path => _outputPath = path),
-            Switch("v", () => Messenger.ShowVerbose = true),
+            Switch("v", () => MessageDisplay.ShowVerbose = true),
         ]);
     }
-
-    private void Run()
+    
+    /// <summary>
+    /// Main program logic.
+    /// </summary>
+    protected override void Main()
     {
         LoRom rom = new(ReadRom());
         new Disassembly.Disassembler(rom).Disassemble();
     }
-
-    private void TryMain(string[] args)
-    {
-        ParseArgs(args);
-        Run();
-    }
-
+    
+    /// <summary>
+    /// Reads the ROM image from the specified path.
+    /// </summary>
     private RomImage ReadRom()
     {
         if (string.IsNullOrEmpty(_romPath))
@@ -43,18 +49,8 @@ public class Program
         return RomImage.FromFile(_romPath);
     }
     
-    public static int Main(string[] args)
-    {
-        try
-        {
-            new Program().TryMain(args);
-            return 0;
-        }
-        catch (Exception e)
-        {
-            Messenger.Error(e.Message);
-            Messenger.Verbose(e.StackTrace);
-            return 1;
-        }
-    }
+    /// <summary>
+    /// Initial entry point.
+    /// </summary>
+    public static int Main(string[] args) => new Program().Run(args);
 }

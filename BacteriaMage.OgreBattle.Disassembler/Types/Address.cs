@@ -1,6 +1,6 @@
 ﻿// github.com/BacteriaMage
 
-using static BacteriaMage.OgreBattle.Disassembler.Utilities.Convert;
+using static BacteriaMage.OgreBattle.Disassembler.Utilities.ValueConversion;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Types;
 

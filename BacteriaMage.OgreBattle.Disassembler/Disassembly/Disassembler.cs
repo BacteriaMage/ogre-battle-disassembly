@@ -1,7 +1,7 @@
 ﻿using BacteriaMage.OgreBattle.Disassembler.Types;
 using BacteriaMage.OgreBattle.Disassembler.Decode;
 
-using static BacteriaMage.OgreBattle.Disassembler.Utilities.Messenger;
+using static BacteriaMage.OgreBattle.Disassembler.UI.MessageDisplay;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Disassembly;
 
