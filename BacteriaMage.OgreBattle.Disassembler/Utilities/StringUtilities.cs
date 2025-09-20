@@ -81,25 +81,26 @@ public static class StringUtilities
     /// <param name="value">The string to parse.</param>
     /// <param name="result">Returns the boolean equivalent of the string.</param>   
     /// <returns>Returns the boolean equivalent of the string, or null if parsing failed.</returns>
-    public static bool TryParseBool(this string value, out bool? result)
+    public static bool TryParseBool(this string value, out bool result)
     {
-        string[] trueValues = ["true", "yes", "on", "1"];
-        string[] falseValues = ["false", "no", "off", "0"];
+        string[] trueValues = ["true", "yes", "on", "1", "t", "y"];
+        string[] falseValues = ["false", "no", "off", "0", "f", "n"];
 
         if (trueValues.Contains(value, StringComparer.OrdinalIgnoreCase))
         {
             result = true;
+            return true;
         }
         else if (falseValues.Contains(value, StringComparer.OrdinalIgnoreCase))
         {
             result = false;
+            return true;       
         }
         else
         {
-            result = null;
+            result = false;
+            return false;       
         }
-
-        return result is not null;
     }
     
     /// <summary>
@@ -109,7 +110,29 @@ public static class StringUtilities
     /// <returns>Returns the boolean equivalent of the string, or null if parsing failed.</returns>
     public static bool? TryParseBool(this string value)
     {
-        return value.TryParseBool(out bool? result) ? result : null;
+        return value.TryParseBool(out bool result) ? result : null;
+    }
+    
+    /// <summary>
+    /// Tries to parse a string as a non-empty string.
+    /// </summary>
+    /// <param name="value">The string to parse.</param>
+    /// <param name="str">Returns the input string.</param> 
+    /// <returns>True if parsing was successful, false otherwise.</returns>
+    public static bool TryParseNonEmpty(string value, out string str)
+    {
+        str = value;
+        return !string.IsNullOrEmpty(value);
+    }
+    
+    /// <summary>
+    /// Tries to parse a string as a non-empty string.
+    /// </summary>
+    /// <param name="value">The string to parse.</param>
+    /// <returns>The non-empty string, or null if parsing failed.</returns>
+    public static string? TryParseNonEmpty(string value)
+    {
+        return TryParseNonEmpty(value, out string str) ? str : null;
     }
     
     /// <summary>
