@@ -1,123 +1,113 @@
 ﻿// github.com/BacteriaMage
 
-using System.Diagnostics.CodeAnalysis;
 using BacteriaMage.OgreBattle.Disassembler.Types;
+using BacteriaMage.OgreBattle.Disassembler.Utilities;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Disassembly;
 
-public class Vector(Address address)
+/// <summary>
+/// Represents an execution vector to begin disassembling at and associated decoder state.
+/// </summary>
+public class Vector
 {
-    public Address Address { get; private set; } = address;
+    /// <summary>
+    /// The address to begin disassembling at.
+    /// </summary>
+    public Address Address { get; private set; }
 
-    public bool MFlag { get; private set; } = true;
-
-    public bool XFlag { get; private set; } = true;
-
+    /// <summary>
+    /// The data bank to assume initially when disassembling.
+    /// </summary>
+    public int DataBank { get; private set; }
+    
+    /// <summary>
+    /// The state of the CPU "M" flag to assume initially when disassembling.
+    /// </summary>
+    public bool MFlag { get; private set; }
+    
+    /// <summary>
+    /// The state of the CPU "X" flag to assume initially when disassembling.
+    /// </summary>
+    public bool XFlag { get; private set; }
+    
+    /// <summary>
+    /// The source code label associated with this execution vector, if any.
+    /// </summary>
     public string? Label { get; private set; }
-
-    #region Deserialize from String
-
-    public static Vector FromString(string serialized)
+    
+    /// <summary>
+    /// Reads the fields of the vector from the specified column parser.
+    /// </summary>
+    private void ReadColumns(ColumnParser parser)
     {
-        if (TryFromString(serialized, out var vector))
-        {
-            return vector;
-        }
-
-        throw new ArgumentException("String is not a valid vector.");
-    }
-
-    public static bool TryFromString(string serialized, [MaybeNullWhen(false)] out Vector vector)
-    {
-        if (IsBlankLine(serialized))
-        {
-            vector = null;
-            return false;
-        }
-        else
-        {
-            string[] parts = serialized.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-            return TryFromParts(parts, out vector);
-        }
-    }
-
-    private static bool TryFromParts(string[] parts, [MaybeNullWhen(false)] out Vector vector)
-    {
-        vector = null;
+        Address = new Address(parser.NextInt());
+        DataBank = parser.NextInt();
+        MFlag = parser.NextBool();
+        XFlag = parser.NextBool();
         
-        if (parts.Length is >= 3 and <= 4)
-        {
-            if (TryHex(parts[0], out var address))
-            {
-                if (TryFlag(parts[1], out var mFlag) && TryFlag(parts[2], out var xFlag))
-                {
-                    if (parts.Length > 3)
-                    {
-                        vector = new Vector(address, mFlag, xFlag, parts[3]);
-                    }
-                    else
-                    {
-                        vector = new Vector(address, mFlag, xFlag);
-                    }
-                }
-            }
-        }
+        parser.Optional();
         
-        return vector != null;
-    }
-
-    private static bool TryHex(string hex, out int value)
-    {
-        throw new NotImplementedException();
-    }
-
-    private static bool TryFlag(string flag, out bool value)
-    {
-        throw new NotImplementedException();
-    }
-
-    private static bool TryLabel(string label, out string value)
-    {
-        throw new NotImplementedException();
+        Label = parser.NextString();
     }
     
-    private static bool IsBlankLine(string line)
+    /// <summary>
+    /// Parses a vector from a line of text.
+    /// </summary>
+    /// <param name="line">The line of text to parse.</param>
+    /// <returns>The parsed vector.</returns>
+    public static Vector FromString(string line)
     {
-        string? trimmed = line?.Trim();
-        return trimmed?.StartsWith(';') ?? true;
+        ColumnParser parser = new();
+        parser.Start(line);
+        return FromColumns(parser);
     }
-
-    #endregion
     
-    #region Constructors
+    /// <summary>
+    /// Parses a vector from an initialized column parser.
+    /// </summary>
+    /// <param name="parser">The column parser to read from.</param>
+    /// <returns>The parsed vector.</returns>
+    public static Vector FromColumns(ColumnParser parser)
+    {
+        Vector vector = new();
+        vector.ReadColumns(parser);
+        return vector;
+    }
     
-    public Vector(Address address, bool mFlag, bool xFlag, string label) 
-        : this(address, mFlag, xFlag)
+    /// <summary>
+    /// Creates a new Vector object.
+    /// </summary>
+    /// <param name="address">The address to begin disassembling at.</param>
+    /// <param name="dataBank">The data bank to assume initially when disassembling.</param>
+    /// <param name="mFlag">The state of the CPU "M" flag to assume initially when disassembling.</param>
+    /// <param name="xFlag">The state of the CPU "X" flag to assume initially when disassembling.</param>
+    /// <param name="label">The source code label associated with this execution vector.</param>
+    public Vector(Address address, int dataBank, bool mFlag, bool xFlag, string label) 
+        : this(address, dataBank, mFlag, xFlag)
     {
         Label = label;
     }
-
-    public Vector(Address address, bool mFlag, bool xFlag)
-        : this(address)
+    
+    /// <summary>
+    /// Creates a new Vector object.
+    /// </summary>
+    /// <param name="address">The address to begin disassembling at.</param>
+    /// <param name="dataBank">The data bank to assume initially when disassembling.</param>
+    /// <param name="mFlag">The state of the CPU "M" flag to assume initially when disassembling.</param>
+    /// <param name="xFlag">The state of the CPU "X" flag to assume initially when disassembling.</param>
+    public Vector(Address address, int dataBank, bool mFlag, bool xFlag)
+        : this()
     {
+        Address = address;
+        DataBank = dataBank;
         MFlag = mFlag;
         XFlag = xFlag;
     }
-
-    public Vector(int address, bool mFlag, bool xFlag, string label) 
-        : this(new Address(address), mFlag, xFlag, label)
-    {
-    }
-
-    public Vector(int address, bool mFlag, bool xFlag)
-        : this(new Address(address), mFlag, xFlag)
-    {
-    }
-
-    public Vector(int address)
-        : this(new Address(address))
-    {
-    }
     
-    #endregion
+    /// <summary>
+    /// Creates a new Vector object.
+    /// </summary>
+    private Vector()
+    {
+    }
 }

@@ -39,7 +39,7 @@ public static class StringUtilities
     /// <returns>True if the string was successfully parsed as a hexadecimal integer; otherwise, false.</returns>
     public static bool TryParseHex(this string value, out int result)
     {
-        string? hex = value.TryTrimPrefix("0x") ?? value.TryTrimPrefix("#") ?? value.TryTrimSuffix("h");
+        string? hex = value.TryTrimPrefix("0x") ?? value.TryTrimPrefix("$") ?? value.TryTrimSuffix("h");
         
         return int.TryParse(hex, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out result);
     }
