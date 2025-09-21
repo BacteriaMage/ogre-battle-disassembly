@@ -1,7 +1,9 @@
 ﻿// github.com/BacteriaMage
 
+using BacteriaMage.OgreBattle.Disassembler.Config;
 using BacteriaMage.OgreBattle.Disassembler.Rom;
 using BacteriaMage.OgreBattle.Disassembler.UI;
+using BacteriaMage.OgreBattle.Disassembler.Utilities;
 
 namespace BacteriaMage.OgreBattle.Disassembler;
 
@@ -12,8 +14,7 @@ using static ArgumentsParser;
 /// </summary>
 public class Program : AbstractProgram
 {
-    private string? _romPath;
-    private string? _outputPath;
+    private ConfigFile? _config = null;
     
     /// <summary>
     /// Parse command-line arguments.
@@ -21,10 +22,11 @@ public class Program : AbstractProgram
     protected override void ParseArgs(string[] args)
     {
         ArgumentsParser.ParseArgs(args, [
-            Required("RomPath", path => _romPath = path),
-            Required("OutputPath", path => _outputPath = path),
+            Required("ConfigPath", path => _config = new ConfigFile(path)),
             Switch("v", () => MessageDisplay.ShowVerbose = true),
         ]);
+        
+        MessageDisplay.ShowVerbose |= _config!.Verbose ?? false;
     }
     
     /// <summary>
@@ -32,21 +34,8 @@ public class Program : AbstractProgram
     /// </summary>
     protected override void Main()
     {
-        LoRom rom = new(ReadRom());
+        LoRom rom = new(RomImage.FromFile(_config!.RomPath));
         new Disassembly.Disassembler(rom).Disassemble();
-    }
-    
-    /// <summary>
-    /// Reads the ROM image from the specified path.
-    /// </summary>
-    private RomImage ReadRom()
-    {
-        if (string.IsNullOrEmpty(_romPath))
-        {
-            throw new ArgumentException("No ROM path specified.");
-        }
-        
-        return RomImage.FromFile(_romPath);
     }
     
     /// <summary>

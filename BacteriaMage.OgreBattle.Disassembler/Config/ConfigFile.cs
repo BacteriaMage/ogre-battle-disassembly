@@ -5,21 +5,28 @@ using BacteriaMage.OgreBattle.Disassembler.Utilities;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Config;
 
+using static FileSystemUtilities;
+
 /// <summary>
 /// Disassembler configuration file.
 /// </summary>
 /// <param name="path">Path to the configuration file.</param>
-public class ConfigFile(string path) : TextFile(path)
+public class ConfigFile(string path) : TextFile(ResolveFilePath(path))
 {
     /// <summary>
-    /// Path to the configuration file.
+    /// Full path to the configuration file.
     /// </summary>
-    public string ConfigPath => FilePath!;
-    
+    public string ConfigPath { get; } = ResolveFilePath(path);
+
     /// <summary>
     /// Name of the configuration file.
     /// </summary>
     public string ConfigName => Path.GetFileName(ConfigPath);
+    
+    /// <summary>
+    /// Directory containing the configuration file. 
+    /// </summary>
+    public string ConfigDirectory => Path.GetDirectoryName(ConfigPath)!;
     
     /// <summary>
     /// ROM file path configuration setting.
@@ -82,16 +89,13 @@ public class ConfigFile(string path) : TextFile(path)
     {
         string[] pieces = line.Split('=').Select(piece => piece.Trim()).ToArray();
 
-        if (pieces.Length == 2)
+        if (pieces.Length != 2 || pieces.Any(string.IsNullOrWhiteSpace))
         {
-            if (!pieces.Any(string.IsNullOrWhiteSpace))
-            {
-                key = pieces[0];
-                value = pieces[1];
-            }
+            throw Error("Expected Key=Value.");
         }
-
-        throw Error("Expected Key=Value.");
+        
+        key = pieces[0];
+        value = pieces[1];
     }
     
     /// <summary>
@@ -101,7 +105,7 @@ public class ConfigFile(string path) : TextFile(path)
     {
         if (!string.IsNullOrWhiteSpace(path))
         {
-            return path;
+            return ResolveFilePath(path, ConfigDirectory);
         }
 
         throw Error("Expected file path.");
