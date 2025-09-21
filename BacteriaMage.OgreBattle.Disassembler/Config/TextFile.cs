@@ -71,6 +71,13 @@ public abstract class TextFile
     }
 
     /// <summary>
+    /// Called after all lines have been processed.
+    /// </summary>
+    protected virtual void AfterAllLines()
+    {
+    }
+
+    /// <summary>
     /// Creates an exception for an invalid line of text.
     /// </summary>
     /// <returns>An exception indicating the line is invalid.</returns>

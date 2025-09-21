@@ -1,4 +1,6 @@
-﻿namespace BacteriaMage.OgreBattle.Disassembler.Types.Exceptions;
+﻿// github.com/BacteriaMage
+
+namespace BacteriaMage.OgreBattle.Disassembler.Types.Exceptions;
 
 /// <summary>
 /// Exception representing an invalid line of text.
