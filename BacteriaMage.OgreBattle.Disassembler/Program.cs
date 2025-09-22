@@ -1,9 +1,9 @@
 ﻿// github.com/BacteriaMage
 
 using BacteriaMage.OgreBattle.Disassembler.Config;
+using BacteriaMage.OgreBattle.Disassembler.Disassembly;
 using BacteriaMage.OgreBattle.Disassembler.Rom;
 using BacteriaMage.OgreBattle.Disassembler.UI;
-using BacteriaMage.OgreBattle.Disassembler.Utilities;
 
 namespace BacteriaMage.OgreBattle.Disassembler;
 
@@ -14,8 +14,8 @@ using static ArgumentsParser;
 /// </summary>
 public class Program : AbstractProgram
 {
-    private ConfigFile? _config = null;
-    
+    private ConfigFile? _config;
+
     /// <summary>
     /// Parse command-line arguments.
     /// </summary>
@@ -34,8 +34,21 @@ public class Program : AbstractProgram
     /// </summary>
     protected override void Main()
     {
-        LoRom rom = new(RomImage.FromFile(_config!.RomPath));
-        new Disassembly.Disassembler(rom).Disassemble();
+        var disassembler = CreateDisassembler();
+        disassembler.Disassemble();
+    }
+    
+    /// <summary>
+    /// Creates a new disassembler instance.
+    /// </summary>
+    protected Disassembly.Disassembler CreateDisassembler()
+    {
+        RomImage rom = RomImage.FromFile(_config!.RomPath);
+        Vectors vectors = Vectors.FromFile(_config!.VectorsPath);
+        
+        LoRom cartridge = new(rom);
+        
+        return new Disassembly.Disassembler(cartridge, vectors);
     }
     
     /// <summary>
