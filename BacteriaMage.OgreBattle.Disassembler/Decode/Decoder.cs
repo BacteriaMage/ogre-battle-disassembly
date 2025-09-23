@@ -14,7 +14,12 @@ public class Decoder(ICartridgeBus bus) : IDecoderState
     /// The current position where the next instruction to decode will be read from.
     /// </summary>
     public Address Position { get; private set; }
-
+    
+    /// <summary>
+    /// The current data bank to use when decoding data references.
+    /// </summary>
+    public int DataBank { get; set; }
+    
     /// <summary>
     /// The state of the CPU "M" flag the decoder will assume.
     /// </summary>
@@ -83,10 +88,15 @@ public class Decoder(ICartridgeBus bus) : IDecoderState
         {
             Opcode opcode = ReadOpcode();
             int operandSize = ComputeOperandSize(opcode);
+            int length = operandSize + 1;
             
-            instruction = new Instruction(opcode, Position, ReadOperand(operandSize), operandSize + 1);
+            int operand = ReadOperand(operandSize);
+            Address? codeReference = ComputeCodeReference(opcode, operand);
+            Address? dataReference = ComputeDataReference(opcode, operand);
+            
+            instruction = new Instruction(opcode, Position, length, operand, codeReference, dataReference);
+            
             HaveNext = (opcode.Behavior == OpcodeBehavior.Next);
-            
             Advance(operandSize);
             
             return true;
@@ -135,6 +145,30 @@ public class Decoder(ICartridgeBus bus) : IDecoderState
         }
         
         return operand;
+    }
+
+    /// <summary>
+    /// Computes the decoded code reference for the given opcode and operand.
+    /// </summary>
+    /// <param name="opcode">The opcode for which to compute the code reference.</param>
+    /// <param name="operand">The operand value for which to compute the code reference.</param>
+    /// <returns>The decoded code reference address, or null if not applicable.</returns>
+    private Address? ComputeCodeReference(Opcode opcode, int operand)
+    {
+        // TODO: Implement code reference computation.
+        return null;
+    }
+    
+    /// <summary>
+    /// Computes the decoded data reference for the given opcode and operand.
+    /// </summary>
+    /// <param name="opcode">The opcode for which to compute the data reference.</param>
+    /// <param name="operand">The operand value for which to compute the data reference.</param>
+    /// <returns>The decoded data reference address, or null if not applicable.</returns>
+    private Address? ComputeDataReference(Opcode opcode, int operand)
+    {
+        // TODO: Implement data reference computation.
+        return null;
     }
     
     /// <summary>

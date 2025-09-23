@@ -7,7 +7,13 @@ namespace BacteriaMage.OgreBattle.Disassembler.Decode;
 /// <summary>
 /// Represents a decoded instruction containing information about its opcode, address, operand, and length.
 /// </summary>
-public class Instruction(Opcode opcode, Address address, int operand, int length)
+public class Instruction(
+    Opcode opcode,
+    Address address,
+    int length,
+    int operand,
+    Address? codeReference,
+    Address? dataReference)
 {
     /// <summary>
     /// The opcode of the decoded instruction.
@@ -18,21 +24,31 @@ public class Instruction(Opcode opcode, Address address, int operand, int length
     /// The address where the instruction was decoded from.
     /// </summary>
     public readonly Address Address = address;
-    
+
     /// <summary>
     /// The range of bytes covered by the instruction.
     /// </summary>
     public readonly AddressRange Range = new(address, length);
-    
-    /// <summary>
-    /// The operand of the decoded instruction.
-    /// </summary>
-    public readonly int Operand = operand;
-    
+
     /// <summary>
     /// The length of the instruction in bytes.
     /// </summary>
     public readonly int Length = length;
+
+    /// <summary>
+    /// The operand of the decoded instruction.
+    /// </summary>
+    public readonly int Operand = operand;
+
+    /// <summary>
+    /// The decoded code address the instruction operand refers to, if applicable.
+    /// </summary>
+    public readonly Address? CodeReference = codeReference;
+
+    /// <summary>
+    /// The decoded data address the instruction operand refers to, if applicable.
+    /// </summary>
+    public readonly Address? DataReference = dataReference;
 
     /// <summary>
     /// Determines if the given address overlaps with the range covered by this instruction.

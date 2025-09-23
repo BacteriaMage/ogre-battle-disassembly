@@ -15,6 +15,11 @@ public interface IDecoderState
     Address Position { get; }
 
     /// <summary>
+    /// The current data bank to use when decoding data references.
+    /// </summary>
+    public int DataBank { get; }
+    
+    /// <summary>
     /// Gets the state of the CPU "M" flag the decoder will assume.
     /// </summary>
     public bool MFlag { get; }
