@@ -89,7 +89,7 @@ public class Formatter(Instructions instructions, Labels labels)
     {
         if (Labels.TryGetValue(instruction.Address, out var label))
         {
-            WriteLine(label.Name);
+            WriteLine($"{label.Name}:");
         }
     }
 
