@@ -52,6 +52,13 @@ public abstract class TextFile
     {
         ProcessLines(lines);
     }
+
+    /// <summary>
+    /// Called before any lines are processed.
+    /// </summary>
+    protected virtual void BeforeAllLines()
+    {
+    }
     
     /// <summary>
     /// Pre-processor for lines of text. The default implementation removes comments.
@@ -115,6 +122,8 @@ public abstract class TextFile
     /// </summary>
     private void ProcessLines(IEnumerable<string> lines)
     {
+        BeforeAllLines();
+        
         foreach (string line in lines)
         {
             LineNumber++;
@@ -126,6 +135,8 @@ public abstract class TextFile
                 ProcessLine(prepared);
             }
         }
+        
+        AfterAllLines();
     }
     
     /// <summary>

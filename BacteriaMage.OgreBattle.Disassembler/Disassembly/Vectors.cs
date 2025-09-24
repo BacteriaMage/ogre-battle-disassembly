@@ -2,7 +2,6 @@
 
 using System.Collections;
 using BacteriaMage.OgreBattle.Disassembler.Config;
-using BacteriaMage.OgreBattle.Disassembler.Types.Exceptions;
 using BacteriaMage.OgreBattle.Disassembler.Utilities;
 
 namespace BacteriaMage.OgreBattle.Disassembler.Disassembly;
@@ -40,17 +39,17 @@ public class Vectors : List<Vector>
     /// <summary>
     /// Reads execution vectors from a text file.
     /// </summary>
-    private class VectorReader : TextFile, IEnumerable<Vector>
+    private class VectorReader(string path) : TextFile(path), IEnumerable<Vector>
     {
-        private List<Vector> _vectors = [];
-        private ColumnParser _parser;
-        
+        private readonly List<Vector> _vectors = [];
+        private ColumnParser? _parser;
+
         /// <summary>
-        /// Creates a new execution vector reader.
+        /// Set up the parser before processing lines.
         /// </summary>
-        public VectorReader(string path) : base(path)
+        protected override void BeforeAllLines()
         {
-            _parser = new ColumnParser(Error);
+            _parser = new ColumnParser(Invalid);
         }
         
         /// <summary>
@@ -58,25 +57,25 @@ public class Vectors : List<Vector>
         /// </summary>
         protected override void ProcessLine(string line)
         {
-            _parser.Start(line);
+            _parser!.Start(line);
             _vectors.Add(Vector.FromColumns(_parser));
         }
         
         /// <summary>
         /// Creates an exception for a parsing error.
         /// </summary>
-        private Exception Error(int column, string message)
+        private Exception Invalid(int column, string message)
         {
-            string? name = Path.GetFileName(FilePath);
             int line = LineNumber;
+            string? name = Path.GetFileName(FilePath);
 
             if (string.IsNullOrEmpty(name))
             {
-                return new InvalidTextLineException($"({line}:{column}) {message}.", line);
+                return Invalid($"({line}:{column}) {message}.");
             }
             else
             {
-                return new InvalidTextLineException($"({name}:{line}:{column}) {message}.", line, FilePath!);   
+                return Invalid($"({name}:{line}:{column}) {message}.");   
             }
         }
         
