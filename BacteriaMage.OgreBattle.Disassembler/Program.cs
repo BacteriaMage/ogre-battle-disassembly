@@ -36,12 +36,14 @@ public class Program : AbstractProgram
     {
         var disassembler = CreateDisassembler();
         disassembler.Disassemble();
+        
+        OutputDisassembly(disassembler);
     }
     
     /// <summary>
     /// Creates a new disassembler instance.
     /// </summary>
-    protected Disassembly.Disassembler CreateDisassembler()
+    private Disassembly.Disassembler CreateDisassembler()
     {
         RomImage rom = RomImage.FromFile(_config!.RomPath);
         Vectors vectors = Vectors.FromFile(_config!.VectorsPath);
@@ -49,6 +51,14 @@ public class Program : AbstractProgram
         LoRom cartridge = new(rom);
         
         return new Disassembly.Disassembler(cartridge, vectors);
+    }
+
+    /// <summary>
+    /// Outputs the disassembly to the configured output file.
+    /// </summary>
+    private void OutputDisassembly(Disassembly.Disassembler disassembler)
+    {
+        Formatter.ForDisassembler(disassembler).WriteTo(_config!.OutputPath);
     }
     
     /// <summary>
