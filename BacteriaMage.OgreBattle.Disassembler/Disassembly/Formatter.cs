@@ -154,12 +154,12 @@ public class Formatter(Instructions instructions, Labels labels)
     {
         string pattern = opcode.Pattern;
         
-        ToBytes(value, out byte high, out byte middle, out byte low);
+        ToBytes(value, out byte b2, out byte b1, out byte b0);
         
-        pattern = Replace(pattern, "$HHMMLL", $"${high:X2}{middle:X2}{low:X2}");
-        pattern = Replace(pattern, "$HHLL", $"${high:X2}{low:X2}");
-        pattern = Replace(pattern, "$HH", $"${high:X2}");
-        pattern = Replace(pattern, "$LL", $"${low:X2}");
+        pattern = Replace(pattern, "$HHMMLL", $"${b2:X2}{b1:X2}{b0:X2}");
+        pattern = Replace(pattern, "$HHLL", $"${b1:X2}{b0:X2}");
+        pattern = Replace(pattern, "$HH", $"${b1:X2}");
+        pattern = Replace(pattern, "$LL", $"${b0:X2}");
         
         return pattern;
     }
