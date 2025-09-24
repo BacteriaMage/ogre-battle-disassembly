@@ -59,7 +59,7 @@ public class Instructions : ICollection<Instruction>, IReadOnlyCollection<Instru
     {
         for (int index = 0; index < Count; index++)
         {
-            if (address >= _instructions[index].Address)
+            if (address < _instructions[index].Address)
             {
                 return index;
             }
