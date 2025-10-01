@@ -9,6 +9,7 @@
 * **[Obelisk 6502 Guide](https://www.nesdev.org/obelisk-6502-guide/)** *(Nesdev Wiki)*
 * **[Super NES Programming](https://en.wikibooks.org/wiki/Super_NES_Programming)** *(Wikibooks)*
 * **[WDC 65C816](https://en.wikipedia.org/wiki/WDC_65C816)** *(Wikipedia)*
+* **[ca65 Users Guide](https://cc65.github.io/doc/ca65.html)** *macro assembler for the 6502, 65C02, and 65816 CPUs*
 
 ## Internal Header
 Location:  
@@ -33,15 +34,29 @@ Location:
 **LoROM**: `$7FE0–7FFF`  
 **HiROM**: `$FFE0–$FFFF`
 
-| Vector | Purpose            | Notes |
-|--------|-------------------|-------|
-| RESET  | Boot entry point   | Where CPU begins execution |
-| NMI    | V‑Blank interrupt  | Runs once/frame during V‑Blank |
-| IRQ    | IRQ/Timer interrupt| Raster effects, HDMA tricks |
-| COP    | Co‑Processor trap  | Rare, sometimes used for debugging |
-| BRK    | Software break     | Debug (mostly unused in games) |
-| ABORT  | Abort trap         | Rare |
-| Separate EMU vs NATIVE mode entries but **RESET, NMI, IRQ** are the critical 3 |
+### Native Mode Vectors
+
+| Vector | LoROM Address | HiROM Address | Purpose            | Notes |
+|--------|---------------|---------------|-------------------|-------|
+| COP    | `$00:7FE4–7FE5` | `$00:FFE4–FFE5` | Co‑Processor trap  | Rare, sometimes used for debugging |
+| BRK    | `$00:7FE6–7FE7` | `$00:FFE6–FFE7` | Software break     | Debug (mostly unused in games) |
+| ABORT  | `$00:7FE8–7FE9` | `$00:FFE8–FFE9` | Abort trap         | Rare |
+| NMI    | `$00:7FEA–7FEB` | `$00:FFEA–FFEB` | V‑Blank interrupt  | Runs once/frame during V‑Blank |
+| RESET  | `$00:7FEC–7FED` | `$00:FFEC–FFED` | (Unused in native) | - |
+| IRQ    | `$00:7FEE–7FEF` | `$00:FFEE–FFEF` | IRQ/Timer interrupt| Raster effects, HDMA tricks |
+
+### Emulation Mode Vectors (6502 compatibility)
+
+| Vector | LoROM Address | HiROM Address | Purpose            | Notes |
+|--------|---------------|---------------|-------------------|-------|
+| COP    | `$00:7FF4–7FF5` | `$00:FFF4–FFF5` | Co‑Processor trap  | Rare |
+| (Unused)| `$00:7FF6–7FF7` | `$00:FFF6–FFF7` | -                  | - |
+| ABORT  | `$00:7FF8–7FF9` | `$00:FFF8–FFF9` | Abort trap         | Rare |
+| NMI    | `$00:7FFA–7FFB` | `$00:FFFA–FFFB` | V‑Blank interrupt  | Runs once/frame during V‑Blank |
+| RESET  | `$00:7FFC–7FFD` | `$00:FFFC–FFFD` | Boot entry point   | Where CPU begins execution |
+| IRQ/BRK| `$00:7FFE–7FFF` | `$00:FFFE–FFFF` | IRQ/BRK interrupt  | IRQ + BRK share vector in emulation mode |
+
+**Note:** The 65C816 starts in emulation mode on power-up, so the **RESET** vector at `$FFFC–FFFD` (HiROM) or `$7FFC–7FFD` (LoROM) is critical. The **NMI** and **IRQ** vectors are the most commonly used during normal operation.
 
 ## CPU
 - **[Ricoh 5A22](https://en.wikipedia.org/wiki/Ricoh_5A22)** (65C816‑based, backward compatible w/6502).
@@ -129,19 +144,16 @@ Additional ROM mapped into normally unused spaces. Header byte: `$35`.
 
 ### Diagrammatic Summary
 
-```
-SNES CPU Address Space (24-bit)   Size      LoROM                  HiROM
--------------------------------   -------   ---------------------  -------------------
-$00–$3F:0000–1FFF                 8 KiB     WRAM mirrors           WRAM mirrors
-$00–$3F:2000–21FF                 512 B     PPU/APU regs           PPU/APU regs
-$00–$3F:4200–437F                 384 B     DMA/timers/etc         DMA/timers/etc
-$00–$3F:8000–FFFF                 32 KiB    ROM banks              Mostly open / partial ROM
-
-$40–$7D:0000–FFFF                 64 KiB    Open/mirrors (ExLoROM) ROM banks (HiROM main area)
-$7E–$7F:0000–FFFF                 128 KiB   WRAM                   WRAM
-$80–$BF:8000–FFFF                 32 KiB    Mirror of $00–3F       Mirror of LoROM low space
-$C0–$FF:0000–FFFF                 64 KiB    Open/mirrors (ExLoROM) Mirror of $40–7D
-```
+| SNES CPU Address Space (24-bit) | Size | LoROM | HiROM |
+|--------------------------------|------|-------|-------|
+| $00–$3F:0000–1FFF | 8 KiB | WRAM mirrors | WRAM mirrors |
+| $00–$3F:2000–21FF | 512 B | PPU/APU regs | PPU/APU regs |
+| $00–$3F:4200–437F | 384 B | DMA/timers/etc | DMA/timers/etc |
+| $00–$3F:8000–FFFF | 32 KiB | ROM banks | Mostly open / partial ROM |
+| $40–$7D:0000–FFFF | 64 KiB | Open/mirrors (ExLoROM) | ROM banks (HiROM main area) |
+| $7E–$7F:0000–FFFF | 128 KiB | WRAM | WRAM |
+| $80–$BF:8000–FFFF | 32 KiB | Mirror of $00–3F | Mirror of LoROM low space |
+| $C0–$FF:0000–FFFF | 64 KiB | Open/mirrors (ExLoROM) | Mirror of $40–7D |
 
 ### Errata
 - **LoROM** → $8000–FFFF area in each bank (32 KiB chunks). Convenience for small programs, common in action/platformers.  
